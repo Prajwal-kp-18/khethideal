@@ -30,8 +30,10 @@ export default async function RootLayout({
 }) {
   // const user = session?.user.role;
   return (
-    <>
-      
+    <html lang="en">
+      <body
+      // className={${inter.variable} font-inter antialiased bg-black text-white tracking-tight}
+      >
         {/* <NextThemesProvider
         attribute="class"
         defaultTheme="dark"
@@ -44,12 +46,10 @@ export default async function RootLayout({
 
         <NavbarLogin />
         {children}
-       
-       
         {/* <Footer /> */}
         {/* </div> */}
         {/* </NextThemesProvider> */}
-      
-    </>
+      </body>
+    </html>
   );
 }

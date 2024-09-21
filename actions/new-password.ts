@@ -22,23 +22,40 @@ export const newPassword = async (
     return { error: "Invalid Fields" };
   }
   
-  if (!recaptcha_token) {
-    return { error: "reCAPTCHA token not found! Refresh and try again" };
-  }
-  const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
+ 
+  // if (!recaptcha_token) {
+  //   return { error: "reCAPTCHA token not found! Try again" };
+  // }
 
-  // Verify reCAPTCHA token
-  const recaptchaResponse = await fetch(
-    `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptcha_token}`,
-    { method: "POST" }
-  );
-  const recaptchaResult = await recaptchaResponse.json();
+  // const data = {
+  //   "event": {
+  //     "token": recaptcha_token,
+  //     "siteKey": process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY,
+  //   }
+  // }
 
-  console.log(recaptchaResult);
-  if (!recaptchaResult.success) {
-    return { error: recaptchaResult["error-codes"] };
-  }
+  // const recaptchaResponse = await fetch(
+  //      `https://recaptchaenterprise.googleapis.com/v1/projects/${process.env.RECAPTCHA_PROJECT}/assessments?key=${process.env.RECAPTCHA_API_KEY}`,
+  //      {
+  //       method: "POST",
+  //       body: JSON.stringify(data),
+  //      }
+  //  );
 
+  // // const recaptchaSecretKey = process.env.RECAPTCHA_SECRET_KEY;
+
+  // // // Verify reCAPTCHA token
+  // // const recaptchaResponse = await fetch(
+  // //   `https://www.google.com/recaptcha/api/siteverify?secret=${recaptchaSecretKey}&response=${recaptcha_token}`,
+  // //   { method: "POST" }
+  // // );
+
+  // const recaptchaResult = await recaptchaResponse.json();
+
+  // console.log(recaptchaResult.riskAnalysis.score);
+  // if (recaptchaResult.riskAnalysis.score < 0.7) {
+  //   return { error: recaptchaResult["error-codes"] };
+  // }
 
   const { password } = validatedFields.data;
 

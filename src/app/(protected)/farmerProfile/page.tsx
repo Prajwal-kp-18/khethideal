@@ -7,6 +7,7 @@ import "@/components/styles/p1a.css";
 import "@/components/styles/p1c.css";
 import FDash from "../components/FDash";
 import Link from "next/link";
+import { toast } from "react-toastify";
 
 const BuyerProfile = () => {
   const [formData, setFormData] = useState({
@@ -41,11 +42,15 @@ const BuyerProfile = () => {
         method: "PUT",
         body: JSON.stringify({ contractId }),
       });
+
+
       if (!response.ok) {
         throw new Error("Error signing contract");
       }
-    } catch (error) {
-      console.error("Error signing contract:", error);
+
+      toast.success("Contract signed successfully!");
+    } catch (error: any) {
+      toast.error("Error signing contract:", error);
     } finally {
     }
   };
@@ -76,8 +81,8 @@ const BuyerProfile = () => {
         link.click();
         document.body.removeChild(link); // Clean up
       }
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
+    } catch (error: any) {
+      toast.error("Error downloading PDF:", error);
     } finally {
       setDLoading(false);
     }
@@ -96,9 +101,9 @@ const BuyerProfile = () => {
 
       const res = await response.json();
 
-      console.log(res.message);
-    } catch (error) {
-      console.error("Error canceling contract:", error);
+      toast.success("Contract cancelled successfully!");
+    } catch (error: any) {
+      toast.error("Error canceling contract:", error);
     } finally {
       setCLoading(false);
     }
@@ -144,7 +149,7 @@ const BuyerProfile = () => {
         credentials: "include",
       });
       if (!response.ok) {
-        throw new Error("Failed to fetch reviews");
+        throw new Error("Failed to fetch contracts");
       }
 
       const data = await response.json();
@@ -153,7 +158,6 @@ const BuyerProfile = () => {
       setCompletedContracts(data.contracts.completedContracts);
       setContracts(data.contracts);
 
-      console.log(contracts);
     };
 
     fetchDocument();

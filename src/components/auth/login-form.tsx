@@ -42,12 +42,6 @@ export const LoginForm = () => {
   const [refreshReCaptcha, setRefreshReCaptcha] = useState(false);
   const [csrfToken, setCsrfToken] = useState<string>("");
 
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = `https://www.google.com/recaptcha/api.js?render=explicit`;
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
 
   // set reCAPTCHA token
   const setTokenFunc = (getToken: string) => {
@@ -66,7 +60,13 @@ export const LoginForm = () => {
     setError("");
     setSuccess("");
 
+    grecaptcha.enterprise.ready(async () => {
+      const token = await grecaptcha.enterprise.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
+      setTokenFunc(token);
+    });
+
     const recaptcha_token = token;
+
     // const data = await fetchCsrfToken();
     // if (data) {
     //   const details = await data.json();
@@ -76,6 +76,7 @@ export const LoginForm = () => {
     //   // Handle the case where data is null
     //   console.error("Data is null");
     // }
+
 
 
 
@@ -181,7 +182,7 @@ export const LoginForm = () => {
           <Button type="submit" className="w-full" disabled={isPending}>
             {showTwoFactor ? "Confirm" : "Login"}
           </Button>
-          <GoogleReCaptchaProvider
+          {/* <GoogleReCaptchaProvider
             reCaptchaKey={
               process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
                 ? process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
@@ -192,7 +193,7 @@ export const LoginForm = () => {
               onVerify={setTokenFunc}
               refreshReCaptcha={refreshReCaptcha}
             />
-          </GoogleReCaptchaProvider>
+          </GoogleReCaptchaProvider> */}
         </form>
       </Form>
     </CardWrapper>

@@ -8,6 +8,7 @@ import {
   GoogleReCaptcha,
 } from "react-google-recaptcha-v3";
 import { getErrorMessage, fetchCsrfToken } from "@/lib/clientUtils/secure";
+import { toast } from "react-toastify";
 
 
 export default function ContractProposalForm() {
@@ -58,6 +59,11 @@ export default function ContractProposalForm() {
 
 
     try {
+      grecaptcha.enterprise.ready(async () => {
+        const token = await grecaptcha.enterprise.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY, {action: 'LOGIN'});
+        setTokenFunc(token);
+      });
+  
       data.recaptcha_token = token;
 
       // const res = await fetchCsrfToken();
@@ -79,25 +85,19 @@ export default function ContractProposalForm() {
 
       const result = await response.json();
       if (response.ok) {
-        alert("Contract proposal created successfully!");
+        toast.success("Contract proposal created successfully!");
       } else {
-        alert(result.message || "Error creating contract proposal");
+        toast.error(result.message || "Error creating contract proposal");
       }
     } catch (err) {
       setRefreshReCaptcha(!refreshReCaptcha);
       console.error(err);
-      alert("Error creating contract proposal");
+      toast.error("Error creating contract proposal");
     }
   };
 
   
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = `https://www.google.com/recaptcha/api.js?render=${process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY}`;
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
- 
+
 
   return (
     <div className="modal">

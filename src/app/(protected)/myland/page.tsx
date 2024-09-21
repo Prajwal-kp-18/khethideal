@@ -6,6 +6,7 @@ import "@/components/styles/p2b.css";
 import "@/components/styles/p2c.css";
 import Link from "next/link";
 import { toast } from "react-toastify";
+import { AnyArn } from "aws-sdk/clients/groundstation";
 
 // Define types for Buyers, Land Details, and Work Status
 interface Buyer {
@@ -75,8 +76,10 @@ const LandlordProfile: React.FC = () => {
       if (!response.ok) {
         throw new Error("Error signing contract");
       }
-    } catch (error) {
-      console.error("Error signing contract:", error);
+
+      toast.success("Contract signed successfully!");
+    } catch (error: any) {
+      toast.error("Error signing contract:", error);
     } finally {
     }
   };
@@ -95,14 +98,12 @@ const LandlordProfile: React.FC = () => {
       const res = await response.json();
 
       if (!res) {
-        console.error(res);
+        toast.error(res);
         return;
       }
-      console.log(res);
-      console.log(res.presignedUrl);
+
       const presignedUrl = res.presignedUrl;
 
-      console.log(presignedUrl);
       if (presignedUrl) {
         // Create a temporary link to trigger the download
         const link = document.createElement("a");
@@ -112,8 +113,8 @@ const LandlordProfile: React.FC = () => {
         link.click();
         document.body.removeChild(link); // Clean up
       }
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
+    } catch (error: any) {
+      toast.error("Error downloading PDF:", error);
     } finally {
       setDLoading(false);
     }
@@ -128,9 +129,9 @@ const LandlordProfile: React.FC = () => {
 
       const res = await response.json();
 
-      console.log(res.message);
-    } catch (error) {
-      console.error("Error cancelling contract:", error);
+      toast.success("Contract cancelled successfully!");
+    } catch (error: any) {
+      toast.error("Error cancelling contract:", error);
     } finally {
       setCLoading(false);
     }

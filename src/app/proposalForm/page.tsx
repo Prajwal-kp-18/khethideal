@@ -10,6 +10,7 @@ import {
   GoogleReCaptcha,
 } from "react-google-recaptcha-v3";
 import { getErrorMessage, fetchCsrfToken } from "@/lib/clientUtils/secure";
+import { toast } from "react-toastify";
 export default function Contract() {
   const [buyerId, setBuyerId] = useState("");
   const [sellerId, setSellerId] = useState("");
@@ -24,6 +25,13 @@ export default function Contract() {
   const onSubmitform = async (data: any) => {
     console.log(data);
     try {
+
+      
+      grecaptcha.enterprise.ready(async () => {
+        const token = await grecaptcha.enterprise.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
+        setTokenFunc(token);
+      });
+  
       data.recaptcha_token = token;
 
     //   const res = await fetchCsrfToken();
@@ -45,22 +53,17 @@ export default function Contract() {
 
       const result = await response.json();
       if (response.ok) {
-        alert("Contract created successfully!");
+        toast.success("Contract created successfully!");
       } else {
-        alert(result.message || "Error creating contract");
+        toast.error(result.message || "Error creating contract");
       }
     } catch (err) {
       setRefreshReCaptcha(!refreshReCaptcha);
       console.error(err);
-      alert("Error creating contract");
+      toast.error("Error creating contract");
     }
   };
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = `https://www.google.com/recaptcha/api.js?render=explicit&onload=onloadCallback`;
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
+
   
  
   const {

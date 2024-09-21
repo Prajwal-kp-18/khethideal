@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import "./buyer.css";
+import { toast } from "react-toastify";
 interface FarmerDashboardProps {
   onSearchResults: (results: any[]) => void;
 }
@@ -52,10 +53,11 @@ const BuyerDashboard: React.FC<FarmerDashboardProps> = ({
       const data = await response.json();
       onSearchResults(data);
       console.log("Form submitted successfully:", data[0]);
+      toast.success("Form submitted successfully!")
 
       // Optionally, reset form after successful submission
-    } catch (error) {
-      console.error("Error submitting form:", error);
+    } catch (error: any) {
+      toast.error("Error submitting form:", error);
     }
   };
 

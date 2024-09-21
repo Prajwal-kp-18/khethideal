@@ -105,8 +105,10 @@ const ShareCropperDashboard: React.FC = () => {
       if (!response.ok) {
         throw new Error("Error signing contract");
       }
-    } catch (error) {
-      console.error("Error signing contract:", error);
+
+      toast.success("Contract signed successfully!");
+    } catch (error: any) {
+      toast.error("Error signing contract:", error);
     } finally {
     }
   };
@@ -126,14 +128,12 @@ const ShareCropperDashboard: React.FC = () => {
       const res = await response.json();
 
       if (!res) {
-        console.error(res);
+        toast.error(res.message);
         return;
       }
-      console.log(res);
-      console.log(res.presignedUrl);
+
       const presignedUrl = res.presignedUrl;
 
-      console.log(presignedUrl);
       if (presignedUrl) {
         // Create a temporary link to trigger the download
         const link = document.createElement("a");
@@ -143,8 +143,8 @@ const ShareCropperDashboard: React.FC = () => {
         link.click();
         document.body.removeChild(link); // Clean up
       }
-    } catch (error) {
-      console.error("Error downloading PDF:", error);
+    } catch (error: any) {
+      toast.error("Error downloading PDF:", error);
     } finally {
       setDLoading(false);
     }
@@ -160,9 +160,9 @@ const ShareCropperDashboard: React.FC = () => {
 
       const res = await response.json();
 
-      console.log(res.message);
-    } catch (error) {
-      console.error("Error cancelling contract:", error);
+      toast.success("Contract cancelled successfully!");
+    } catch (error: any) {
+      toast.error("Error cancelling contract:", error);
     } finally {
       setCLoading(false);
     }

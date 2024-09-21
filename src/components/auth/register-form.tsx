@@ -56,12 +56,7 @@ export const RegisterForm = () => {
     },
   });
   
-  useEffect(() => {
-    const script = document.createElement("script");
-    script.src = `https://www.google.com/recaptcha/api.js?render=explicit`;
-    script.async = true;
-    document.body.appendChild(script);
-  }, []);
+
 
   useEffect(() => {
     const onLocationFound = (position: GeolocationPosition) => {
@@ -88,8 +83,13 @@ export const RegisterForm = () => {
   const onSubmit = async(values: any) => {
     setError("");
     setSuccess("");
+    grecaptcha.enterprise.ready(async () => {
+      const token = await grecaptcha.enterprise.execute(process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY);
+      setTokenFunc(token);
+    });
 
     const recaptcha_token = token;
+
   //  const data = await fetchCsrfToken();
   //   if (data) {
   //     const details = await data.json();
@@ -250,7 +250,7 @@ export const RegisterForm = () => {
           <Button type="submit" className="w-full" disabled={isPending}>
             Create an account
           </Button>
-          <GoogleReCaptchaProvider
+          {/* <GoogleReCaptchaProvider
             reCaptchaKey={
               process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
                 ? process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY
@@ -261,7 +261,7 @@ export const RegisterForm = () => {
               onVerify={setTokenFunc}
               refreshReCaptcha={refreshReCaptcha}
             />
-          </GoogleReCaptchaProvider>
+          </GoogleReCaptchaProvider> */}
         </form>
       </Form>
     </CardWrapper>
