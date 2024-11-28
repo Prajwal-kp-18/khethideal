@@ -1,7 +1,7 @@
 import NextAuth, { type DefaultSession } from "next-auth";
 
 export type ExtendedUser = DefaultSession["user"] & {
-  role?: "ADMIN" | "USER";
+  role?: "farmer" | "buyer" | "USER";
   number?: string;
 };
 

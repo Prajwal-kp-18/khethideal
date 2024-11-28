@@ -18,7 +18,8 @@ datasource db {
 // }
 
 enum UserRole {
-  ADMIN
+  farmer
+  buyer
   USER
 }
 
@@ -31,7 +32,7 @@ model User {
   image         String?
   password      String?
   number String?
-  role          String? 
+  role          UserRole 
   latitude String?
   longitude String?
   

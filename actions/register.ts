@@ -8,6 +8,13 @@ import { getUserByEmail } from "../data/user";
 import { generateVerificationToken } from "@/lib/tokens";
 import { sendVerificationEmail } from "../src/lib/mail";
 import { getAllCoordinates } from "../data/user";
+
+enum UserRole {
+  farmer,
+  buyer,
+  USER,
+}
+
 export const register = async (values: any) => {
   const { recaptcha_token, ...value } = values;
   const validatedFields = RegisterSchema.safeParse(value);
@@ -23,7 +30,6 @@ export const register = async (values: any) => {
   //   })
   // );
 
- 
   // if (!recaptcha_token) {
   //   return { error: "reCAPTCHA token not found! Try again" };
   // }
@@ -71,6 +77,12 @@ export const register = async (values: any) => {
 
   const existingUser = await getUserByEmail(email);
   const caseRole = role.toLowerCase();
+  let count;
+  if (caseRole === "buyer") {
+    count = 1;
+  } else {
+    count = 0;
+  }
 
   if (existingUser) {
     return { error: "Email already exists" };
@@ -82,7 +94,7 @@ export const register = async (values: any) => {
       password: hashedPassword,
       name,
       number,
-      role: caseRole,
+      role: count ? "buyer" : "farmer",
       latitude,
       longitude,
     },

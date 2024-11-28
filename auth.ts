@@ -54,7 +54,11 @@ export const {
       }
 
       if (token.role && session.user) {
-        session.user.role = token.role;
+        session.user.role = token.role as
+          | "farmer"
+          | "buyer"
+          | "USER"
+          | undefined;
       }
       if (token.number && session.user) {
         session.user.number = token.number.toString();

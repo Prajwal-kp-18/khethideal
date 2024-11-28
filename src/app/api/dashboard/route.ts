@@ -39,7 +39,7 @@ export async function GET() {
         },
       });
     }
-
+    console.log(locations);
     return NextResponse.json(locations, { status: 200 });
   } catch (error) {
     console.error("Error fetching coordinates:", error);
